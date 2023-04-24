@@ -45,7 +45,7 @@ const Chat: React.FC = () => {
     <div className='flex flex-col h-full'>
       <div
         className='overflow-y-auto flex-grow mb-4 p-4 space-y-4'
-        style={{ maxHeight: 'calc(100vh - 160px)' }}
+        style={{ maxHeight: 'calc(100vh - 200px)' }}
       >
         {messages.map((message, index) => (
           <div

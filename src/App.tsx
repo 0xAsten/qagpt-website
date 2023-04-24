@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Login from './components/Login'
 import Chat from './components/Chat'
+import Head from './components/Head'
 import { AuthProvider } from './contexts/AuthContext'
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
             {/* Sidebar content */}
           </div>
           <div className='flex-grow p-6'>
+            <Head />
             <Routes>
               <Route path='/' element={<Chat />} />
               <Route path='/login' element={<Login />} />

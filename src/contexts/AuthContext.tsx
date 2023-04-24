@@ -5,11 +5,13 @@ import { User } from 'firebase/auth'
 interface AuthContextProps {
   user: User | null
   accessToken: string | null
+  logout: () => void
 }
 
 const AuthContext = createContext<AuthContextProps>({
   user: null,
   accessToken: null,
+  logout: () => {},
 })
 
 interface AuthProviderProps {
@@ -31,8 +33,10 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     })
   }, [])
 
+  const logout = async () => await auth.signOut()
+
   return (
-    <AuthContext.Provider value={{ user, accessToken }}>
+    <AuthContext.Provider value={{ user, accessToken, logout }}>
       {children}
     </AuthContext.Provider>
   )

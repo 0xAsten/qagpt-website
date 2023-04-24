@@ -14,8 +14,7 @@ const Chat: React.FC = () => {
 
   useEffect(() => {
     if (!user) {
-      console.log('nevigate to lgoin')
-
+      console.log('navigate to login')
       navigate('/login')
     }
   }, [user, navigate])
@@ -44,11 +43,14 @@ const Chat: React.FC = () => {
 
   return (
     <div className='flex flex-col h-full'>
-      <div className='overflow-y-auto flex-grow mb-4'>
+      <div
+        className='overflow-y-auto flex-grow mb-4 p-4 space-y-4'
+        style={{ maxHeight: 'calc(100vh - 160px)' }}
+      >
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`p-4 rounded mb-2 ${
+            className={`p-4 rounded ${
               message.type === 'question'
                 ? 'bg-blue-500 text-white self-start'
                 : 'bg-gray-300 self-end'
@@ -58,7 +60,7 @@ const Chat: React.FC = () => {
           </div>
         ))}
       </div>
-      <form onSubmit={handleSubmit} className='flex'>
+      <form onSubmit={handleSubmit} className='flex p-4'>
         <input
           type='text'
           className='flex-grow p-2 border border-gray-300 rounded'

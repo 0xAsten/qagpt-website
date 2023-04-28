@@ -21,7 +21,23 @@ const Chat: React.FC = () => {
 
   const [messages, setMessages] = useState<Message[]>([])
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const callFirebaseFunction = async (
+    functionUrl: string,
+    question: string,
+    collection_name: string
+  ) => {
+    const response = await fetch(functionUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ question, collection_name }),
+    })
+
+    return response.body
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     const input = event.currentTarget.querySelector('input') as HTMLInputElement
@@ -34,11 +50,34 @@ const Chat: React.FC = () => {
     setMessages((prevMessages) => [
       ...prevMessages,
       { type: 'question', text: question },
-      // Replace this line with the answer from your Firebase Cloud Function
-      { type: 'answer', text: 'This is a sample answer.' },
     ])
 
     input.value = ''
+
+    // Call the Firebase Cloud Function and get the ReadableStream reader
+    const functionUrl =
+      'https://us-central1-qagpt-384709.cloudfunctions.net/app/qa'
+    const body = await callFirebaseFunction(functionUrl, question, 'Cairo1')
+    const reader = body!.getReader()
+
+    // Read and process the stream data
+    let answer = ''
+    const decoder = new TextDecoder('utf-8')
+
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) {
+        break
+      }
+      const chunk = decoder.decode(value)
+      console.log('resultx' + chunk)
+      answer += chunk
+      // eslint-disable-next-line no-loop-func
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { type: 'answer', text: answer },
+      ])
+    }
   }
 
   return (

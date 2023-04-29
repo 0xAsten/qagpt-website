@@ -55,13 +55,20 @@ const Chat: React.FC = () => {
     input.value = ''
 
     // Call the Firebase Cloud Function and get the ReadableStream reader
-    const functionUrl =
-      'https://us-central1-qagpt-384709.cloudfunctions.net/app/qa'
+    const functionUrl = 'http://127.0.0.1:8080/qa'
     const body = await callFirebaseFunction(functionUrl, question, 'Cairo1')
     const reader = body!.getReader()
 
     // Read and process the stream data
     let answer = ''
+    const answerIndex = messages.length
+    // console.log('answerIndex' + answerIndex)
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { type: 'answer', text: answer },
+    ])
+
     const decoder = new TextDecoder('utf-8')
 
     while (true) {
@@ -70,13 +77,14 @@ const Chat: React.FC = () => {
         break
       }
       const chunk = decoder.decode(value)
-      console.log('resultx' + chunk)
       answer += chunk
+
       // eslint-disable-next-line no-loop-func
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { type: 'answer', text: answer },
-      ])
+      setMessages((prevMessages) => {
+        const updatedMessages = [...prevMessages]
+        updatedMessages[answerIndex + 1] = { type: 'answer', text: answer }
+        return updatedMessages
+      })
     }
   }
 

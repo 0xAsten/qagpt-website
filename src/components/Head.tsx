@@ -1,9 +1,13 @@
 import React, { useContext } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 
-const Head = () => {
-  const { user, logout } = useContext(AuthContext)
+interface HeadProps {
+  sidebarValue: string
+}
 
+const Head = (props: HeadProps) => {
+  const { user, logout } = useContext(AuthContext)
+  const { sidebarValue } = props
   const handleLogout = async () => {
     try {
       await logout()
@@ -14,7 +18,10 @@ const Head = () => {
 
   return (
     <div className='bg-blue-500 flex justify-between items-center p-4'>
-      <h1 className='text-white text-xl'>Question Answering over Docs</h1>
+      <h1 className='text-white text-xl'>
+        Question Answering over{' '}
+        <span className='text-yellow-400'>{sidebarValue}</span> Docs
+      </h1>
       {user && (
         <div className='flex items-center'>
           <span className='text-white mr-4'>Logged in as: {user.email}</span>

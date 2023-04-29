@@ -7,9 +7,13 @@ interface Message {
   text: string
 }
 
-const Chat: React.FC = () => {
-  const { user } = useContext(AuthContext)
+interface ChatProps {
+  sidebarValue: string
+}
 
+const Chat: React.FC<ChatProps> = (props) => {
+  const { user } = useContext(AuthContext)
+  const { sidebarValue } = props
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -56,7 +60,7 @@ const Chat: React.FC = () => {
 
     // Call the Firebase Cloud Function and get the ReadableStream reader
     const functionUrl = 'http://127.0.0.1:8080/qa'
-    const body = await callFirebaseFunction(functionUrl, question, 'Cairo1')
+    const body = await callFirebaseFunction(functionUrl, question, sidebarValue)
     const reader = body!.getReader()
 
     // Read and process the stream data

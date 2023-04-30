@@ -12,9 +12,15 @@ interface ChatProps {
 }
 
 const Chat: React.FC<ChatProps> = (props) => {
-  const { user } = useContext(AuthContext)
+  const { user, accessToken } = useContext(AuthContext)
+  const [error, setError] = useState<string | null>(null)
+
   const { sidebarValue } = props
   const navigate = useNavigate()
+
+  const dismissError = () => {
+    setError(null)
+  }
 
   useEffect(() => {
     if (!user) {
@@ -25,6 +31,8 @@ const Chat: React.FC<ChatProps> = (props) => {
 
   const [messages, setMessages] = useState<Message[]>([])
 
+  // console.log('accessToken:' + accessToken)
+
   const callFirebaseFunction = async (
     functionUrl: string,
     question: string,
@@ -34,15 +42,17 @@ const Chat: React.FC<ChatProps> = (props) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + accessToken,
       },
       body: JSON.stringify({ question, collection_name }),
     })
 
-    return response.body
+    return response
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    dismissError()
 
     const input = event.currentTarget.querySelector('input') as HTMLInputElement
     const question = input.value.trim()
@@ -62,8 +72,14 @@ const Chat: React.FC<ChatProps> = (props) => {
 
     // Call the Firebase Cloud Function and get the ReadableStream reader
     const functionUrl = 'http://127.0.0.1:8080/qa'
-    const body = await callFirebaseFunction(functionUrl, question, sidebarValue)
-    const reader = body!.getReader()
+    const res = await callFirebaseFunction(functionUrl, question, sidebarValue)
+
+    if (res.status !== 200) {
+      setError('Error: ' + res.statusText)
+      return
+    }
+
+    const reader = res.body!.getReader()
 
     // Read and process the stream data
     let answer = ''
@@ -129,6 +145,17 @@ const Chat: React.FC<ChatProps> = (props) => {
 
   return (
     <div className='flex flex-col h-full'>
+      {error && (
+        <div className='bg-red-500 text-white p-2 mb-2 rounded'>
+          <span>{error}</span>
+          <button
+            className='bg-red-700 text-white p-1 ml-2 rounded'
+            onClick={dismissError}
+          >
+            X
+          </button>
+        </div>
+      )}
       <div
         className='overflow-y-auto flex-grow mb-4 p-4 space-y-4'
         style={{ maxHeight: 'calc(100vh - 200px)' }}

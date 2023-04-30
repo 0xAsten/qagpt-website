@@ -51,6 +51,8 @@ const Chat: React.FC<ChatProps> = (props) => {
       return
     }
 
+    const answerIndex = messages.length
+
     setMessages((prevMessages) => [
       ...prevMessages,
       { type: 'question', text: question },
@@ -65,8 +67,6 @@ const Chat: React.FC<ChatProps> = (props) => {
 
     // Read and process the stream data
     let answer = ''
-    const answerIndex = messages.length
-    // console.log('answerIndex' + answerIndex)
 
     setMessages((prevMessages) => [
       ...prevMessages,
@@ -90,6 +90,41 @@ const Chat: React.FC<ChatProps> = (props) => {
         return updatedMessages
       })
     }
+
+    // Save chat history to localStorage
+    setMessages((prevMessages) => {
+      const updatedMessages = [...prevMessages]
+      localStorage.setItem(
+        'chatHistory_'.concat(sidebarValue),
+        JSON.stringify(updatedMessages)
+      )
+      return updatedMessages
+    })
+  }
+
+  // Load chat history from localStorage on component mount
+  useEffect(() => {
+    const storedMessages = localStorage.getItem(
+      'chatHistory_'.concat(sidebarValue)
+    )
+    // console.log('component mounted' + storedMessages)
+    if (storedMessages) {
+      setMessages(JSON.parse(storedMessages))
+    } else {
+      setMessages([])
+    }
+  }, [sidebarValue])
+
+  // Save chat history to localStorage whenever messages change
+  // useEffect(() => {
+  //   console.log('messages changed' + messages)
+
+  //   localStorage.setItem('chatHistory', JSON.stringify(messages))
+  // }, [messages])
+
+  const clearChatHistory = () => {
+    setMessages([]) // Clear chat history from state
+    localStorage.removeItem('chatHistory_'.concat(sidebarValue)) // Clear chat history from localStorage
   }
 
   return (
@@ -122,6 +157,12 @@ const Chat: React.FC<ChatProps> = (props) => {
           className='bg-blue-500 text-white p-2 ml-2 rounded'
         >
           Send
+        </button>
+        <button
+          onClick={clearChatHistory}
+          className='bg-red-500 text-white p-2 ml-2 rounded'
+        >
+          Clear History
         </button>
       </form>
     </div>

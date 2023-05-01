@@ -47,7 +47,11 @@ const Chat: React.FC<ChatProps> = (props) => {
       body: JSON.stringify({ question, collection_name }),
     })
 
-    return response
+    if (response.status !== 200) {
+      throw new Error(response.statusText)
+    }
+
+    return response.body!
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -70,16 +74,17 @@ const Chat: React.FC<ChatProps> = (props) => {
 
     input.value = ''
 
-    // Call the Firebase Cloud Function and get the ReadableStream reader
-    const functionUrl = 'http://127.0.0.1:8080/qa'
-    const res = await callFirebaseFunction(functionUrl, question, sidebarValue)
-
-    if (res.status !== 200) {
-      setError('Error: ' + res.statusText)
+    let result
+    try {
+      // Call the Firebase Cloud Function and get the ReadableStream reader
+      const functionUrl = 'http://127.0.0.1:8080/qa'
+      result = await callFirebaseFunction(functionUrl, question, sidebarValue)
+    } catch (error: any) {
+      setError(`Error calling Firebase Function: ${error.message}`)
       return
     }
 
-    const reader = res.body!.getReader()
+    const reader = result.getReader()
 
     // Read and process the stream data
     let answer = ''

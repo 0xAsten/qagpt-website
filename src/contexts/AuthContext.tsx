@@ -30,6 +30,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
+      console.log('AuthStateChanged')
+
       setUser(user)
       if (user) {
         user.getIdToken().then((token) => setAccessToken(token))

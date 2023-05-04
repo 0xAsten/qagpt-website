@@ -77,7 +77,7 @@ const Chat: React.FC<ChatProps> = (props) => {
     let result
     try {
       // Call the Firebase Cloud Function and get the ReadableStream reader
-      const functionUrl = 'http://127.0.0.1:8080/qa'
+      const functionUrl = 'https://api.thathub.xyz/qa'
       result = await callFirebaseFunction(functionUrl, question, sidebarValue)
     } catch (error: any) {
       setError(`Error calling Firebase Function: ${error.message}`)

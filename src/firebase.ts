@@ -2,13 +2,13 @@ import { initializeApp } from 'firebase/app'
 import { GithubAuthProvider, getAuth } from 'firebase/auth'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAcxXPMCR8qMJA5WruBzSJ2jn8bq8Ei21Y',
-  authDomain: 'qagpt-384709.firebaseapp.com',
-  projectId: 'qagpt-384709',
-  storageBucket: 'qagpt-384709.appspot.com',
-  messagingSenderId: '695100102216',
-  appId: '1:695100102216:web:a74a5ec35fdcb35f8dea7d',
-  measurementId: 'G-M8K7F5RKM1',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 }
 
 initializeApp(firebaseConfig)

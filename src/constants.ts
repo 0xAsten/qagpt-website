@@ -1,3 +1,3 @@
-const TABS = ['Cairo', 'Starknet', 'Rust']
+const TABS = ['cairo', 'starknet', 'rust']
 
 export { TABS }

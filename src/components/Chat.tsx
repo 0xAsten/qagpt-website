@@ -8,7 +8,7 @@ interface Message {
 }
 
 interface ChatProps {
-  sidebarValue: string
+  sidebarValue: { name: string; isOpen: boolean }
 }
 
 const Chat: React.FC<ChatProps> = (props) => {
@@ -78,7 +78,11 @@ const Chat: React.FC<ChatProps> = (props) => {
     try {
       // Call the Firebase Cloud Function and get the ReadableStream reader
       const functionUrl = 'https://api.thathub.xyz/qa'
-      result = await callFirebaseFunction(functionUrl, question, sidebarValue)
+      result = await callFirebaseFunction(
+        functionUrl,
+        question,
+        sidebarValue.name
+      )
     } catch (error: any) {
       setError(`Error calling Firebase Function: ${error.message}`)
       return
@@ -116,7 +120,7 @@ const Chat: React.FC<ChatProps> = (props) => {
     setMessages((prevMessages) => {
       const updatedMessages = [...prevMessages]
       localStorage.setItem(
-        'chatHistory_'.concat(sidebarValue),
+        'chatHistory_'.concat(sidebarValue.name),
         JSON.stringify(updatedMessages)
       )
       return updatedMessages
@@ -126,7 +130,7 @@ const Chat: React.FC<ChatProps> = (props) => {
   // Load chat history from localStorage on component mount
   useEffect(() => {
     const storedMessages = localStorage.getItem(
-      'chatHistory_'.concat(sidebarValue)
+      'chatHistory_'.concat(sidebarValue.name)
     )
     // console.log('component mounted' + storedMessages)
     if (storedMessages) {
@@ -145,7 +149,7 @@ const Chat: React.FC<ChatProps> = (props) => {
 
   const clearChatHistory = () => {
     setMessages([]) // Clear chat history from state
-    localStorage.removeItem('chatHistory_'.concat(sidebarValue)) // Clear chat history from localStorage
+    localStorage.removeItem('chatHistory_'.concat(sidebarValue.name)) // Clear chat history from localStorage
   }
 
   return (
@@ -178,25 +182,34 @@ const Chat: React.FC<ChatProps> = (props) => {
           </div>
         ))}
       </div>
-      <form onSubmit={handleSubmit} className='flex p-4'>
-        <input
-          type='text'
-          className='flex-grow p-2 border border-gray-300 rounded'
-          placeholder='Type your question...'
-        />
-        <button
-          type='submit'
-          className='bg-blue-500 text-white p-2 ml-2 rounded'
-        >
-          Send
-        </button>
-        <button
-          onClick={clearChatHistory}
-          className='bg-red-500 text-white p-2 ml-2 rounded'
-        >
-          Clear History
-        </button>
-      </form>
+      {sidebarValue.isOpen ? (
+        <>
+          <form onSubmit={handleSubmit} className='flex p-4'>
+            <input
+              type='text'
+              className='flex-grow p-2 border border-gray-300 rounded'
+              placeholder='Type your question...'
+            />
+            <button
+              type='submit'
+              className='bg-blue-500 text-white p-2 ml-2 mr-2 rounded'
+            >
+              Send
+            </button>
+            <button
+              onClick={clearChatHistory}
+              className='bg-red-500 text-white p-2 rounded'
+            >
+              Clear History
+            </button>
+          </form>
+        </>
+      ) : (
+        <div className='p-4 text-center text-red-500 font-bold'>
+          {sidebarValue.name} question answering over docs is not open. Please
+          stay tuned!
+        </div>
+      )}
     </div>
   )
 }

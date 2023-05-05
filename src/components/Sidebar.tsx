@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { TABS } from '../constants'
 
 interface SidebarProps {
-  onValueChange: (value: { name: string; url: string }) => void
+  onValueChange: (value: { name: string; url: string; isOpen: boolean }) => void
   sidebarValue: string
 }
 
@@ -10,7 +10,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onValueChange, sidebarValue }) => {
   const tabs = TABS
   const [activeTab, setActiveTab] = useState(tabs[0].name)
 
-  const handleTabClick = (value: { name: string; url: string }) => {
+  const handleTabClick = (value: {
+    name: string
+    url: string
+    isOpen: boolean
+  }) => {
     setActiveTab(value.name)
     onValueChange(value)
   }

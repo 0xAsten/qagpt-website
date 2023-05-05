@@ -10,7 +10,7 @@ import { TABS } from './constants'
 function App() {
   const [sidebarValue, setSidebarValue] = useState(TABS[0])
 
-  const handleSidebarValueChange = (value: string) => {
+  const handleSidebarValueChange = (value: { name: string; url: string }) => {
     setSidebarValue(value)
   }
 
@@ -21,7 +21,7 @@ function App() {
           <div className='flex-none w-64 p-6 bg-gray-800 text-white'>
             <Sidebar
               onValueChange={handleSidebarValueChange}
-              sidebarValue={sidebarValue}
+              sidebarValue={sidebarValue.name}
             />
           </div>
           <div className='flex-grow flex flex-col'>
@@ -30,7 +30,7 @@ function App() {
               <Routes>
                 <Route
                   path='/'
-                  element={<Chat sidebarValue={sidebarValue} />}
+                  element={<Chat sidebarValue={sidebarValue.name} />}
                 />
                 <Route path='/login' element={<Login />} />
                 {/* Add other routes as needed */}

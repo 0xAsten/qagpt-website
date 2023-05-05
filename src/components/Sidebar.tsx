@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { TABS } from '../constants'
 
 interface SidebarProps {
-  onValueChange: (value: string) => void
+  onValueChange: (value: { name: string; url: string }) => void
   sidebarValue: string
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ onValueChange, sidebarValue }) => {
   const tabs = TABS
-  const [activeTab, setActiveTab] = useState(tabs[0])
+  const [activeTab, setActiveTab] = useState(tabs[0].name)
 
-  const handleTabClick = (value: string) => {
-    setActiveTab(value)
+  const handleTabClick = (value: { name: string; url: string }) => {
+    setActiveTab(value.name)
     onValueChange(value)
   }
 
@@ -28,11 +28,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onValueChange, sidebarValue }) => {
           <li
             key={index}
             className={`tab-item p-4 cursor-pointer hover:bg-gray-700 transition-colors ${
-              tab === activeTab ? 'bg-gray-700' : ''
+              tab.name === activeTab ? 'bg-gray-700' : ''
             }`}
             onClick={() => handleTabClick(tab)}
           >
-            {tab}
+            {tab.name}
           </li>
         ))}
       </ul>

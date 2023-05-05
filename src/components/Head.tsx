@@ -1,8 +1,9 @@
 import React, { useContext } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
+import { Link } from 'react-router-dom'
 
 interface HeadProps {
-  sidebarValue: string
+  sidebarValue: { name: string; url: string }
 }
 
 const Head = (props: HeadProps) => {
@@ -20,7 +21,15 @@ const Head = (props: HeadProps) => {
     <div className='bg-blue-500 flex justify-between items-center p-4'>
       <h1 className='text-white text-xl'>
         Question Answering over{' '}
-        <span className='text-yellow-400'>{sidebarValue}</span> Docs
+        <span className='text-yellow-400'>
+          <Link
+            to={sidebarValue.url}
+            className='underline font-bold hover:text-yellow-600 transition-colors duration-200'
+          >
+            {sidebarValue.name}
+          </Link>
+        </span>{' '}
+        Docs
       </h1>
       {user && (
         <div className='flex items-center'>

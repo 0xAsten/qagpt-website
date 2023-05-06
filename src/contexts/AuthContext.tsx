@@ -22,13 +22,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [accessToken, setAccessToken] = useState<string | null>(null)
 
-  const refreshToken = async () => {
-    const token = await user!.getIdToken(true)
-    // Do anything you need with the new token, such as updating it in your state or local storage
-    setAccessToken(token)
-  }
-
   useEffect(() => {
+    const refreshToken = async () => {
+      const token = await user!.getIdToken(true)
+      // Do anything you need with the new token, such as updating it in your state or local storage
+      setAccessToken(token)
+    }
+
     auth.onAuthStateChanged((user) => {
       console.log('AuthStateChanged')
 
@@ -57,7 +57,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       unsubscribe()
       clearTimeout(timeoutId)
     }
-  }, [])
+  }, [user])
 
   const logout = async () => await auth.signOut()
 

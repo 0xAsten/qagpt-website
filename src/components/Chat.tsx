@@ -54,13 +54,13 @@ const Chat: React.FC<ChatProps> = (props) => {
     return response.body!
   }
 
-  const formatAnswer = (answer: string): string => {
-    return answer
-      .split('.')
-      .map((sentence) => sentence.trim())
-      .filter((sentence) => sentence.length > 0)
-      .join('.\n')
-  }
+  // const formatAnswer = (answer: string): string => {
+  //   return answer
+  //     .split('.')
+  //     .map((sentence) => sentence.trim())
+  //     .filter((sentence) => sentence.length > 0)
+  //     .join('.\n')
+  // }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -116,14 +116,14 @@ const Chat: React.FC<ChatProps> = (props) => {
       const chunk = decoder.decode(value)
       answer += chunk
 
-      const formattedAnswer = formatAnswer(answer)
+      // const formattedAnswer = formatAnswer(answer)
 
       // eslint-disable-next-line no-loop-func
       setMessages((prevMessages) => {
         const updatedMessages = [...prevMessages]
         updatedMessages[answerIndex + 1] = {
           type: 'answer',
-          text: formattedAnswer,
+          text: answer,
         }
         return updatedMessages
       })

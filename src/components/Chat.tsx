@@ -180,7 +180,7 @@ const Chat: React.FC<ChatProps> = (props) => {
       )}
       <div
         className='overflow-y-auto flex-grow mb-4 p-4 space-y-4'
-        style={{ maxHeight: 'calc(100vh - 200px)' }}
+        style={{ maxHeight: 'calc(100vh - 210px)' }}
       >
         {messages.map((message, index) => (
           <div
@@ -201,7 +201,7 @@ const Chat: React.FC<ChatProps> = (props) => {
       </div>
       {sidebarValue.isOpen ? (
         <>
-          <form onSubmit={handleSubmit} className='flex p-4'>
+          <form onSubmit={handleSubmit} className='flex'>
             <input
               type='text'
               className='flex-grow p-2 border border-gray-300 rounded'

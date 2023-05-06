@@ -203,6 +203,10 @@ const Chat: React.FC<ChatProps> = (props) => {
               Clear History
             </button>
           </form>
+          <div className='text-center text-red-500 font-bold'>
+            To prevent abuse and unknown GPT API restrictions. The usage limit
+            is 10 requests per day. Please use it wisely.
+          </div>
         </>
       ) : (
         <div className='p-4 text-center text-red-500 font-bold'>

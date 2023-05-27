@@ -228,9 +228,12 @@ const Chat: React.FC<ChatProps> = (props) => {
           </div>
         </>
       ) : (
+        // <div className='p-4 text-center text-red-500 font-bold'>
+        //   {sidebarValue.name} question answering over docs is not open. Please
+        //   stay tuned!
+        // </div>
         <div className='p-4 text-center text-red-500 font-bold'>
-          {sidebarValue.name} question answering over docs is not open. Please
-          stay tuned!
+          Database is being migrated. Please stay tuned!
         </div>
       )}
     </div>

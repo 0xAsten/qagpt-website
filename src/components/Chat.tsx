@@ -36,7 +36,8 @@ const Chat: React.FC<ChatProps> = (props) => {
   const callFirebaseFunction = async (
     functionUrl: string,
     question: string,
-    collection_name: string
+    // collection_name: string
+    table_name: string
   ) => {
     const response = await fetch(functionUrl, {
       method: 'POST',
@@ -44,7 +45,8 @@ const Chat: React.FC<ChatProps> = (props) => {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + accessToken,
       },
-      body: JSON.stringify({ question, collection_name }),
+      // body: JSON.stringify({ question, collection_name }),
+      body: JSON.stringify({ question, table_name }),
     })
 
     if (response.status !== 200) {
